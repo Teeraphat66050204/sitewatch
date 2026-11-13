@@ -133,9 +133,12 @@ check_http() {
         --connect-timeout "$TIMEOUT" --max-time "$TIMEOUT" \
         --max-redirs 5 -w '%{http_code} %{time_total}' \
         -- "$url" 2>/dev/null)"; then
-        :
+        read -r HTTP_CODE RESPONSE_SEC <<< "${result:-000 0.000}"
+    else
+        # A curl error is DOWN even if an intermediate HTTP code was received.
+        RESPONSE_SEC="${result##* }"
+        HTTP_CODE=000
     fi
-    read -r HTTP_CODE RESPONSE_SEC <<< "${result:-000 0.000}"
     [[ "$HTTP_CODE" =~ ^[0-9]{3}$ ]] || HTTP_CODE=000
     [[ "$RESPONSE_SEC" =~ ^[0-9]+([.][0-9]+)?$ ]] || RESPONSE_SEC=0
     RESPONSE_SEC="$(awk -v seconds="$RESPONSE_SEC" 'BEGIN { printf "%.3f", seconds + 0 }')"
