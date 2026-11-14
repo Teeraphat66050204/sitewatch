@@ -49,8 +49,7 @@ jobs:
           grep -q 'RECOVERY:' /tmp/sitewatch-4.log
           bash bin/sitewatch-report.sh "$SITEWATCH_DATA_DIR/results.csv"
           test "$(wc -l < "$SITEWATCH_DATA_DIR/results.csv")" -eq 9
-          bash bin/sitewatch-report.sh "$SITEWATCH_DATA_DIR/results.csv" | grep -F 
-OVERALL\t4\t8\t50.00'
+          bash bin/sitewatch-report.sh "$SITEWATCH_DATA_DIR/results.csv" | grep -E '^OVERALL[[:space:]]+4[[:space:]]+8[[:space:]]+50[.]00$'
           bash bin/sitewatch.sh -h >/dev/null
           bash bin/sitewatch.sh -n -c /tmp/ci-sitewatch.conf >/dev/null
           if bash bin/sitewatch.sh -c /tmp/not-here-sitewatch.conf; then
