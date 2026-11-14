@@ -48,12 +48,11 @@ main() {
     [[ -r "$MONITOR" ]] || { log ERROR "Missing monitoring script: $MONITOR"; exit 1; }
 
     [[ -r "$CONFIG_FILE" ]] || { log ERROR "Config not readable: $CONFIG_FILE"; exit 1; }
-    # Only source trusted project configuration files.
+    # Only source trusted configuration files (Bash syntax).
     # shellcheck source=/dev/null
     source "$CONFIG_FILE"
     DATA_DIR="${SITEWATCH_DATA_DIR:-${DATA_DIR:-/var/lib/sitewatch}}"
     [[ -n "$DATA_DIR" && "$DATA_DIR" == /* && "$DATA_DIR" != / ]] || { log ERROR 'DATA_DIR must be an absolute directory (not /)'; exit 1; }
-
     local args=(-c "$CONFIG_FILE")
     if (( VERBOSE )); then args+=(-v); fi
     if (( DRY_RUN )); then
@@ -87,44 +86,7 @@ main() {
         printf 'timestamp,type,target,dns,tcp,http_code,response_sec,status\n' >"$csv_file"
     fi
 
-    while IFS=
-        [[ -n "$type" ]] || continue
-        if [[ "$status" != UP && "$status" != DOWN ]]; then
-            log ERROR "Invalid monitor result: $status"
-            exit 1
-        fi
-        now="$(date '+%F %T%z')"
-        printf '%s,%s,%s,%s,%s,%s,%s,%s\n' \
-            "$(csv_quote "$now")" "$(csv_quote "$type")" \
-            "$(csv_quote "$target")" "$(csv_quote "$dns")" \
-            "$(csv_quote "$tcp")" "$(csv_quote "$http")" \
-            "$(csv_quote "$seconds")" "$(csv_quote "$status")" >>"$csv_file"
-
-        prev=""
-        if [[ -r "$state_file" ]]; then
-            prev="$(awk -F '\t' -v t="$type" -v n="$target" '$1==t && $2==n {print $3; exit}' "$state_file")"
-        fi
-        if [[ -n "$prev" && "$prev" != "$status" ]]; then
-            if [[ "$status" == DOWN ]]; then
-                log WARN "ALERT: $type $target changed $prev -> DOWN"
-            else
-                log INFO "RECOVERY: $type $target changed $prev -> UP"
-            fi
-        fi
-        printf '%s\t%s\t%s\n' "$type" "$target" "$status" >>"$state_tmp"
-        row_count=$((row_count + 1))
-    done <"$tmp"
-    if (( row_count == 0 )); then
-        log ERROR "Monitor produced no records"
-        exit 1
-    fi
-    mv -f -- "$state_tmp" "$state_file"
-    rm -f -- "$tmp"
-    trap - EXIT
-    log INFO "Recorded $row_count checks to $csv_file"
-}
-main "$@"
-\t' read -r type target dns tcp http seconds status; do
+    while IFS=$'\t' read -r type target dns tcp http seconds status; do
         [[ -n "$type" ]] || continue
         if [[ "$status" != UP && "$status" != DOWN ]]; then
             log ERROR "Invalid monitor result: $status"
