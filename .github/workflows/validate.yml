@@ -1,0 +1,51 @@
+name: Check SiteWatch fallback
+on:
+  push:
+    branches: [backup/demo-integration]
+  pull_request:
+
+jobs:
+  shell-and-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install required tools
+        run: sudo apt-get update && sudo apt-get install -y shellcheck netcat-openbsd curl
+      - name: Shell syntax and ShellCheck
+        run: |
+          bash -n bin/sitewatch.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
+          shellcheck bin/sitewatch.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
+      - name: Check UP DOWN and transition-only alerts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat >/tmp/ci-sitewatch.conf <<'CONF'
+          URLS=("http://127.0.0.1:8765")
+          SERVICES=("127.0.0.1:8765")
+          TIMEOUT=3
+          HTTP_MIN=200
+          HTTP_MAX=399
+          CONF
+          export SITEWATCH_DATA_DIR="$RUNNER_TEMP/sitewatch"
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/sitewatch-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          sleep 1
+          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-1.log
+          grep -q '"UP"' "$SITEWATCH_DATA_DIR/results.csv"
+          kill "$server"
+          wait "$server" || true
+          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-2.log
+          grep -q 'ALERT:' /tmp/sitewatch-2.log
+          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-3.log
+          if grep -q 'ALERT:' /tmp/sitewatch-3.log; then
+            echo "Repeated alert on unchanged DOWN status" >&2
+            exit 1
+          fi
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/sitewatch-http2.log 2>&1 &
+          server=$!
+          sleep 1
+          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-4.log
+          grep -q 'RECOVERY:' /tmp/sitewatch-4.log
+          bash bin/sitewatch-report.sh "$SITEWATCH_DATA_DIR/results.csv"
+          test "$(wc -l < "$SITEWATCH_DATA_DIR/results.csv")" -eq 9
