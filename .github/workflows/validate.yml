@@ -1,4 +1,4 @@
-name: Check SiteWatch fallback
+name: Validate SiteWatch Emergency protocol
 on:
   push:
     branches: [backup/demo-integration, Emergency-protocol]
@@ -61,3 +61,29 @@ jobs:
           rc=$?
           set -e
           test "$rc" -eq 2
+
+      - name: Test clean installer and uninstaller with isolated systemctl stub
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/mockbin"
+          cat > "$RUNNER_TEMP/mockbin/systemctl" <<'SH'
+          #!/bin/sh
+          printf 'MOCK systemctl %s\n' "$*" >> /tmp/sitewatch-install-test.log
+          exit 0
+          SH
+          chmod 755 "$RUNNER_TEMP/mockbin/systemctl"
+          sudo env PATH="$RUNNER_TEMP/mockbin:$PATH" bash install.sh
+          sudo env PATH="$RUNNER_TEMP/mockbin:$PATH" bash install.sh
+          sudo test -f /usr/local/lib/sitewatch/bin/sitewatch.sh
+          sudo test -f /usr/local/lib/sitewatch/bin/sitewatch-monitor.sh
+          sudo test -f /etc/sitewatch/sitewatch.conf
+          sudo test -f /etc/systemd/system/sitewatch.timer
+          sudo test -f /etc/systemd/system/sitewatch.service
+          grep -q 'Type=oneshot' systemd/sitewatch.service
+          grep -q 'OnUnitInactiveSec=3min' systemd/sitewatch.timer
+          sudo env PATH="$RUNNER_TEMP/mockbin:$PATH" bash uninstall.sh --purge
+          sudo test ! -e /usr/local/lib/sitewatch
+          sudo test ! -e /etc/sitewatch/sitewatch.conf
+          sudo test ! -e /var/lib/sitewatch
+          sudo env PATH="$RUNNER_TEMP/mockbin:$PATH" bash uninstall.sh --purge
