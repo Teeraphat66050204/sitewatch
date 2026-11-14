@@ -7,165 +7,227 @@ endobj
 << /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R /F2 10 0 R >> >> /Contents 4 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R /F2 10 0 R /F3 11 0 R >> >> /Contents 4 0 R >>
 endobj
 4 0 obj
-<< /Length 3928 >>
+<< /Length 2564 >>
 stream
-BT /F2 10 Tf 45 808 Td (SITEWATCH  |  Topic 4  |  LINUX and OPERATIONS) Tj ET
-0.65 w 45 799 m 550 799 l S
-BT /F2 15 Tf 45 786 Td (SiteWatch - Website and Service Monitoring Course:) Tj ET
-BT /F1 9.1 Tf 45 757 Td (LINUX and OPERATIONS \(1/69\) - Linux Automation Project) Tj ET
-BT /F1 9.1 Tf 45 744 Td (Project: Topic 4, SiteWatch Date prepared: 14 November) Tj ET
-BT /F1 9.1 Tf 45 731 Td (2026 Group members: [Add real member names and IDs) Tj ET
-BT /F1 9.1 Tf 45 718 Td (before submission] ## 1. Objectives Implement a) Tj ET
-BT /F1 9.1 Tf 45 705 Td (practical Bash automation utility to monitor web URLs) Tj ET
-BT /F1 9.1 Tf 45 692 Td (and TCP host:port services, record repeated checks,) Tj ET
-BT /F1 9.1 Tf 45 679 Td (calculate observed uptime, and notify operators only) Tj ET
-BT /F1 9.1 Tf 45 666 Td (when a monitored target changes state. The tool is) Tj ET
-BT /F1 9.1 Tf 45 653 Td (meant to run automatically every 3 minutes with a) Tj ET
-BT /F1 9.1 Tf 45 640 Td (systemd timer. ## 2. System concept 1. Read the) Tj ET
-BT /F1 9.1 Tf 45 627 Td (external trusted Bash configuration defining URL) Tj ET
-BT /F1 9.1 Tf 45 614 Td (arrays, service arrays, timeout and success-code range.) Tj ET
-BT /F1 9.1 Tf 45 601 Td (2. Validate inputs and confirm necessary commands) Tj ET
-BT /F1 9.1 Tf 45 588 Td (exist. 3. Check DNS using getent ahosts, TCP using nc) Tj ET
-BT /F1 9.1 Tf 45 575 Td (-z -w, and HTTP status/response time using curl. 4.) Tj ET
-BT /F1 9.1 Tf 45 562 Td (Determine UP or DOWN for each target. A URL must pass) Tj ET
-BT /F1 9.1 Tf 45 549 Td (DNS, TCP, and configured HTTP status checks; a service) Tj ET
-BT /F1 9.1 Tf 45 536 Td (must pass DNS and TCP. 5. Append a timestamped record) Tj ET
-BT /F1 9.1 Tf 45 523 Td (for each target to CSV. Load previous state per target) Tj ET
-BT /F1 9.1 Tf 45 510 Td (and issue alerts only for UP -> DOWN and DOWN -> UP. 6.) Tj ET
-BT /F1 9.1 Tf 45 497 Td (Atomically update the state file, calculate uptime) Tj ET
-BT /F1 9.1 Tf 45 484 Td (percentage from CSV, and let systemd repeat the run) Tj ET
-BT /F1 9.1 Tf 45 471 Td (every 3 minutes. ## 3. Components - bin/sitewatch.sh:) Tj ET
-BT /F1 9.1 Tf 45 458 Td (main Bash entrypoint, option handling,) Tj ET
-BT /F1 9.1 Tf 45 445 Td (CSV/state/transition alerts, logging, coordination. -) Tj ET
-BT /F1 9.1 Tf 45 432 Td (bin/sitewatch-monitor.sh: technical network checks and) Tj ET
-BT /F1 9.1 Tf 45 419 Td (tab-separated result stream. - bin/sitewatch-report.sh:) Tj ET
-BT /F1 9.1 Tf 45 406 Td (uptime report from CSV history. -) Tj ET
-BT /F1 9.1 Tf 45 393 Td (config/sitewatch.conf: monitored targets, timeout, HTTP) Tj ET
-BT /F1 9.1 Tf 45 380 Td (status limits, data directory. -) Tj ET
-BT /F1 9.1 Tf 45 367 Td (systemd/sitewatch.service: Type=oneshot invocation of) Tj ET
-BT /F1 9.1 Tf 45 354 Td (the main script. - systemd/sitewatch.timer: first check) Tj ET
-BT /F1 9.1 Tf 45 341 Td (after boot and every 3 minutes after a completed check.) Tj ET
-BT /F1 9.1 Tf 45 328 Td (- install.sh, uninstall.sh: repeatable installation and) Tj ET
-BT /F1 9.1 Tf 45 315 Td (clean removal. ## 4. Commands and algorithm curl) Tj ET
-BT /F1 9.1 Tf 45 302 Td (collects the final HTTP code and time_total \(seconds\),) Tj ET
-BT /F1 9.1 Tf 45 289 Td (with connection and overall timeouts. getent tests name) Tj ET
-BT /F1 9.1 Tf 45 276 Td (resolution, and nc checks whether the TCP port is) Tj ET
-BT /F1 9.1 Tf 45 263 Td (reachable. awk performs numeric processing/reporting,) Tj ET
-BT /F1 9.1 Tf 45 250 Td (while sed trims user-supplied target whitespace. All) Tj ET
-BT /F1 9.1 Tf 45 237 Td (major scripts use a shebang and set -euo pipefail; the) Tj ET
-BT /F1 9.1 Tf 45 224 Td (main script includes main\(\) and additional functions.) Tj ET
-BT /F1 9.1 Tf 45 211 Td (## 5. Uptime and files The CSV contains) Tj ET
-BT /F1 8 Tf 45 35 Td (Report draft - add real group members and evidence before submitting) Tj ET
-BT /F1 8 Tf 500 35 Td (1 / 3) Tj ET
+BT /F2 9 Tf 42 819 Td (SITEWATCH  |  LINUX AUTOMATION  |  TOPIC 4) Tj ET
+0.5 w 42 808 m 553 808 l S
+0 g
+BT /F2 29 Tf 42 795.0 Td (SITEWATCH) Tj ET
+0 g
+BT /F2 15 Tf 42 760.0 Td (Website & Service Monitoring) Tj ET
+0.35 g
+BT /F1 8.5 Tf 42 736.0 Td (Linux Automation Project | Topic 4 | Report draft | 14 November 2026) Tj ET
+0 g
+BT /F2 12 Tf 42 698.0 Td (Group information) Tj ET
+0 g
+BT /F1 10 Tf 42 678.0 Td (Member 1: [enter full name and student ID]) Tj ET
+0 g
+BT /F1 10 Tf 42 660.5 Td (Member 2: [enter full name and student ID]) Tj ET
+0 g
+BT /F1 10 Tf 42 643.0 Td (Member 3: [enter full name and student ID]) Tj ET
+0 g
+BT /F1 10 Tf 42 625.5 Td (Member 4: [enter if applicable]) Tj ET
+0 g
+BT /F2 12 Tf 42 584.0 Td (1. Objective) Tj ET
+0 g
+BT /F1 10 Tf 42 564.0 Td (Design a Linux/Bash monitoring utility for websites and host:port services. The system collects HTTP) Tj ET
+0 g
+BT /F1 10 Tf 42 549.5 Td (status and response time, tests DNS and TCP, stores historical checks, calculates observed uptime) Tj ET
+0 g
+BT /F1 10 Tf 42 535.0 Td (and notifies operators only when target status changes.) Tj ET
+0 g
+BT /F2 12 Tf 42 508.5 Td (2. Project layout) Tj ET
+0 g
+BT /F1 10 Tf 42 488.5 Td (The course-suggested layout is used, with ONE application shell script. Monitoring, state) Tj ET
+0 g
+BT /F1 10 Tf 42 474.0 Td (management, CSV storage, alerts and uptime reporting are all implemented inside bin/sitewatch.sh.) Tj ET
+0 g
+BT /F3 9 Tf 42 456.5 Td (README.md user guide) Tj ET
+0 g
+BT /F3 9 Tf 42 442.5 Td (bin/sitewatch.sh single main script) Tj ET
+0 g
+BT /F3 9 Tf 42 428.5 Td (config/sitewatch.conf trusted configuration) Tj ET
+0 g
+BT /F3 9 Tf 42 414.5 Td (systemd/sitewatch.service systemd oneshot unit) Tj ET
+0 g
+BT /F3 9 Tf 42 400.5 Td (systemd/sitewatch.timer 3-minute timer) Tj ET
+0 g
+BT /F3 9 Tf 42 386.5 Td (install.sh / uninstall.sh deployment/removal) Tj ET
+0 g
+BT /F3 9 Tf 42 372.5 Td (docs/report.pdf this report draft) Tj ET
+0 g
+BT /F3 9 Tf 42 358.5 Td (docs/screenshots/ screenshots of real tests) Tj ET
+0 g
+BT /F2 12 Tf 42 335.5 Td (3. Design principles) Tj ET
+0 g
+BT /F1 10 Tf 42 315.5 Td (Shell scripts use '#!/usr/bin/env bash' and 'set -euo pipefail'. The main script provides usage\(\),) Tj ET
+0 g
+BT /F1 10 Tf 42 301.0 Td (log\(\), debug\(\), check_deps\(\), main\(\) and additional specialized functions. Configuration is sourced) Tj ET
+0 g
+BT /F1 10 Tf 42 286.5 Td (only from trusted files.) Tj ET
+0.55 g
+BT /F1 8 Tf 42 34 Td (Draft report - add student names and genuine screenshots before submission) Tj ET
+BT /F1 8 Tf 535 34 Td (1) Tj ET
 endstream
 endobj
 5 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R /F2 10 0 R >> >> /Contents 6 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R /F2 10 0 R /F3 11 0 R >> >> /Contents 6 0 R >>
 endobj
 6 0 obj
-<< /Length 4087 >>
+<< /Length 3271 >>
 stream
-BT /F2 10 Tf 45 808 Td (SITEWATCH  |  Topic 4  |  LINUX and OPERATIONS) Tj ET
-0.65 w 45 799 m 550 799 l S
-BT /F1 9.1 Tf 45 786 Td (timestamp,type,target,dns,tcp,http_code,response_sec,status.) Tj ET
-BT /F1 9.1 Tf 45 773 Td (The state file stores type,target,last_status as TSV.) Tj ET
-BT /F1 9.1 Tf 45 760 Td (Uptime percentage is 100 * number_of_UP_checks /) Tj ET
-BT /F1 9.1 Tf 45 747 Td (number_of_all_checks for each target. This is sampled) Tj ET
-BT /F1 9.1 Tf 45 734 Td (uptime, not continuous time-based availability. All) Tj ET
-BT /F1 9.1 Tf 45 721 Td (state is keyed by both type and target. ## 6.) Tj ET
-BT /F1 9.1 Tf 45 708 Td (Configuration and CLI -h shows help; -c FILE selects a) Tj ET
-BT /F1 9.1 Tf 45 695 Td (configuration; -v displays detailed diagnostic logs; -n) Tj ET
-BT /F1 9.1 Tf 45 682 Td (validates configuration and lists targets without) Tj ET
-BT /F1 9.1 Tf 45 669 Td (performing network checks or writing data. Exit codes) Tj ET
-BT /F1 9.1 Tf 45 656 Td (are: 0 successful operation, 1 configuration/runtime) Tj ET
-BT /F1 9.1 Tf 45 643 Td (error, and 2 invalid usage. Logs have timestamps and) Tj ET
-BT /F1 9.1 Tf 45 630 Td (INFO/WARN/ERROR severities; systemd records them in the) Tj ET
-BT /F1 9.1 Tf 45 617 Td (journal. ## 7. Scheduling, installation and uninstall) Tj ET
-BT /F1 9.1 Tf 45 604 Td (sudo bash install.sh installs scripts under) Tj ET
-BT /F1 9.1 Tf 45 591 Td (/usr/local/lib/sitewatch/bin, installs a config to) Tj ET
-BT /F1 9.1 Tf 45 578 Td (/etc/sitewatch/sitewatch.conf, creates) Tj ET
-BT /F1 9.1 Tf 45 565 Td (/var/lib/sitewatch, deploys the oneshot service and) Tj ET
-BT /F1 9.1 Tf 45 552 Td (timer, then enables the timer. Re-running install) Tj ET
-BT /F1 9.1 Tf 45 539 Td (retains any existing installed config. sudo bash) Tj ET
-BT /F1 9.1 Tf 45 526 Td (uninstall.sh --purge disables the timer, removes) Tj ET
-BT /F1 9.1 Tf 45 513 Td (installed files and deletes stored CSV/state. The) Tj ET
-BT /F1 9.1 Tf 45 500 Td (monotonic timer uses OnBootSec=1min and) Tj ET
-BT /F1 9.1 Tf 45 487 Td (OnUnitInactiveSec=3min; Persistent=true is only) Tj ET
-BT /F1 9.1 Tf 45 474 Td (appropriate for supported calendar timers, so it is not) Tj ET
-BT /F1 9.1 Tf 45 461 Td (used here. ## 8. Validation and demonstration Test) Tj ET
-BT /F1 9.1 Tf 45 448 Td (cases to capture: 1. Help \(-h\) and dry-run \(-n\). 2. A) Tj ET
-BT /F1 9.1 Tf 45 435 Td (running local Python HTTP server at 127.0.0.1:8000) Tj ET
-BT /F1 9.1 Tf 45 422 Td (reports HTTP 200 and UP. 3. Stopping it results in HTTP) Tj ET
-BT /F1 9.1 Tf 45 409 Td (000, closed TCP, DOWN and a single alert. 4. Checking) Tj ET
-BT /F1 9.1 Tf 45 396 Td (again while down creates no duplicate alert. 5.) Tj ET
-BT /F1 9.1 Tf 45 383 Td (Restarting the web server produces DOWN -> UP recovery) Tj ET
-BT /F1 9.1 Tf 45 370 Td (log. 6. A non-resolving .invalid domain reports DNS) Tj ET
-BT /F1 9.1 Tf 45 357 Td (FAIL and DOWN. 7. Missing config gives ERROR/exit 1;) Tj ET
-BT /F1 9.1 Tf 45 344 Td (invalid option gives exit 2. 8. A ShellCheck pass,) Tj ET
-BT /F1 9.1 Tf 45 331 Td (timer listing, journal logs, CSV/uptime report. 9.) Tj ET
-BT /F1 9.1 Tf 45 318 Td (Fresh VM install and complete uninstall. Verification) Tj ET
-BT /F1 9.1 Tf 45 305 Td (status: Monitoring UP/DOWN and ShellCheck were manually) Tj ET
-BT /F1 9.1 Tf 45 292 Td (demonstrated on the group's Ubuntu 26.04 VM; GitHub) Tj ET
-BT /F1 9.1 Tf 45 279 Td (Actions validates automated branch tests. The course) Tj ET
-BT /F1 9.1 Tf 45 266 Td (PDF requires Ubuntu Server 22.04/24.04 or Rocky Linux) Tj ET
-BT /F1 9.1 Tf 45 253 Td (9, so the final demonstration should be repeated on a) Tj ET
-BT /F1 9.1 Tf 45 240 Td (compliant VM. No claim is made that the entire system) Tj ET
-BT /F1 9.1 Tf 45 227 Td (has already been tested on the group's VM. ## 9.) Tj ET
-BT /F1 9.1 Tf 45 214 Td (Limitations and next steps The parser handles) Tj ET
-BT /F1 9.1 Tf 45 201 Td (HTTP/HTTPS URLs with IPv4 or hostnames, but not) Tj ET
-BT /F1 8 Tf 45 35 Td (Report draft - add real group members and evidence before submitting) Tj ET
-BT /F1 8 Tf 500 35 Td (2 / 3) Tj ET
+BT /F2 9 Tf 42 819 Td (SITEWATCH  |  LINUX AUTOMATION  |  TOPIC 4) Tj ET
+0.5 w 42 808 m 553 808 l S
+0 g
+BT /F2 12 Tf 42 786.0 Td (4. Monitoring process) Tj ET
+0 g
+BT /F1 10 Tf 42 766.0 Td (1\) Read URLS and SERVICES arrays, TIMEOUT, HTTP_MIN, HTTP_MAX and DATA_DIR from the configuration.) Tj ET
+0 g
+BT /F1 10 Tf 42 751.5 Td (Validate targets, ports, timeout values and dependencies.) Tj ET
+0 g
+BT /F1 10 Tf 42 734.0 Td (2\) Use 'getent ahosts' for DNS, 'nc -z -w' for TCP connectivity and 'curl -w' for HTTP code and) Tj ET
+0 g
+BT /F1 10 Tf 42 719.5 Td (total response time.) Tj ET
+0 g
+BT /F1 10 Tf 42 702.0 Td (3\) URL is UP only if DNS=OK, TCP=OPEN and final HTTP code is in the configured range \(default) Tj ET
+0 g
+BT /F1 10 Tf 42 687.5 Td (200-399\). A TCP service is UP when DNS=OK and TCP=OPEN.) Tj ET
+0 g
+BT /F1 10 Tf 42 670.0 Td (4\) Append one timestamped check per target to results.csv. Remember last known target statuses in) Tj ET
+0 g
+BT /F1 10 Tf 42 655.5 Td (state.tsv. Log WARN ALERT on UP-to-DOWN and INFO RECOVERY on DOWN-to-UP, with no duplicate alert if) Tj ET
+0 g
+BT /F1 10 Tf 42 641.0 Td (unchanged.) Tj ET
+0 g
+BT /F2 12 Tf 42 614.5 Td (5. Storage and uptime) Tj ET
+0 g
+BT /F1 10 Tf 42 594.5 Td (results.csv columns: timestamp, type, target, dns, tcp, http_code, response_sec, status. state.tsv) Tj ET
+0 g
+BT /F1 10 Tf 42 580.0 Td (stores type, target and latest UP/DOWN state. sitewatch.log records timestamped INFO/WARN/ERROR) Tj ET
+0 g
+BT /F1 10 Tf 42 565.5 Td (messages.) Tj ET
+0 g
+BT /F1 10 Tf 42 548.0 Td (Observed uptime percentage = \(number of UP checks / number of total checks\) * 100. This measures) Tj ET
+0 g
+BT /F1 10 Tf 42 533.5 Td (sampled checks rather than exact uninterrupted time.) Tj ET
+0 g
+BT /F2 12 Tf 42 507.0 Td (6. CLI and errors) Tj ET
+0 g
+BT /F3 9 Tf 42 487.0 Td (-h help -c FILE custom configuration) Tj ET
+0 g
+BT /F3 9 Tf 42 473.0 Td (-v verbose logging -n dry run, no file writes) Tj ET
+0 g
+BT /F3 9 Tf 42 459.0 Td (-r read uptime report from saved CSV, no new checks) Tj ET
+0 g
+BT /F1 10 Tf 42 445.0 Td (Exit code 0 = successful check \(even if a website is DOWN\); 1 = dependency/config/runtime error; 2 =) Tj ET
+0 g
+BT /F1 10 Tf 42 430.5 Td (invalid argument. A missing config causes the oneshot systemd service to fail; a DOWN website is a) Tj ET
+0 g
+BT /F1 10 Tf 42 416.0 Td (valid monitoring result.) Tj ET
+0 g
+BT /F2 12 Tf 42 389.5 Td (7. Automation and setup) Tj ET
+0 g
+BT /F1 10 Tf 42 369.5 Td (Install with 'sudo bash install.sh'. The installer copies the single main script into) Tj ET
+0 g
+BT /F1 10 Tf 42 355.0 Td (/usr/local/lib/sitewatch/bin, config into /etc/sitewatch, and systemd units into) Tj ET
+0 g
+BT /F1 10 Tf 42 340.5 Td (/etc/systemd/system; re-installation preserves existing config.) Tj ET
+0 g
+BT /F1 10 Tf 42 323.0 Td (The service uses Type=oneshot. The timer starts about one minute after boot and then every three) Tj ET
+0 g
+BT /F1 10 Tf 42 308.5 Td (minutes after the previous run becomes inactive \(OnUnitInactiveSec=3min\). Uninstall using 'sudo bash) Tj ET
+0 g
+BT /F1 10 Tf 42 294.0 Td (uninstall.sh'; --keep-data preserves results.) Tj ET
+0.55 g
+BT /F1 8 Tf 42 34 Td (Draft report - add student names and genuine screenshots before submission) Tj ET
+BT /F1 8 Tf 535 34 Td (2) Tj ET
 endstream
 endobj
 7 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R /F2 10 0 R >> >> /Contents 8 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R /F2 10 0 R /F3 11 0 R >> >> /Contents 8 0 R >>
 endobj
 8 0 obj
-<< /Length 1336 >>
+<< /Length 2610 >>
 stream
-BT /F2 10 Tf 45 808 Td (SITEWATCH  |  Topic 4  |  LINUX and OPERATIONS) Tj ET
-0.65 w 45 799 m 550 799 l S
-BT /F1 9.1 Tf 45 786 Td (bracketed IPv6 hosts. Authentication-protected websites) Tj ET
-BT /F1 9.1 Tf 45 773 Td (may require different HTTP success criteria. Local demo) Tj ET
-BT /F1 9.1 Tf 45 760 Td (targets can be changed in the config. The generated PDF) Tj ET
-BT /F1 9.1 Tf 45 747 Td (is a report draft: add all real student information and) Tj ET
-BT /F1 9.1 Tf 45 734 Td (the team's captured screenshots in docs/screenshots/) Tj ET
-BT /F1 9.1 Tf 45 721 Td (before submitting. ## 10. Presentation checklist -) Tj ET
-BT /F1 9.1 Tf 45 708 Td (Install on a clean supported Ubuntu/Rocky VM. - Show) Tj ET
-BT /F1 9.1 Tf 45 695 Td (systemctl list-timers and journalctl -u) Tj ET
-BT /F1 9.1 Tf 45 682 Td (sitewatch.service with timestamps. - Run sitewatch.sh) Tj ET
-BT /F1 9.1 Tf 45 669 Td (-h, -v, and -n by hand. - Simulate a stopped web server) Tj ET
-BT /F1 9.1 Tf 45 656 Td (and a missing configuration. - Show CSV output, sampled) Tj ET
-BT /F1 9.1 Tf 45 643 Td (uptime, latest state, and transition alerts. - Run) Tj ET
-BT /F1 9.1 Tf 45 630 Td (uninstall.sh --purge and confirm removal.) Tj ET
-BT /F1 8 Tf 45 35 Td (Report draft - add real group members and evidence before submitting) Tj ET
-BT /F1 8 Tf 500 35 Td (3 / 3) Tj ET
+BT /F2 9 Tf 42 819 Td (SITEWATCH  |  LINUX AUTOMATION  |  TOPIC 4) Tj ET
+0.5 w 42 808 m 553 808 l S
+0 g
+BT /F2 12 Tf 42 786.0 Td (8. Validation checklist) Tj ET
+0 g
+BT /F1 10 Tf 42 766.0 Td ([ ] 'shellcheck bin/sitewatch.sh install.sh uninstall.sh' passes.) Tj ET
+0 g
+BT /F1 10 Tf 42 748.5 Td ([ ] 'bash bin/sitewatch.sh -h' displays usage, and '-n' shows configured targets without writing) Tj ET
+0 g
+BT /F1 10 Tf 42 734.0 Td (files.) Tj ET
+0 g
+BT /F1 10 Tf 42 716.5 Td ([ ] A local Python HTTP server on 127.0.0.1:8000 reports UP with HTTP 200.) Tj ET
+0 g
+BT /F1 10 Tf 42 699.0 Td ([ ] Stopping it reports DOWN and emits a WARN alert once per changed target; repeated DOWN emits no) Tj ET
+0 g
+BT /F1 10 Tf 42 684.5 Td (duplicate alert.) Tj ET
+0 g
+BT /F1 10 Tf 42 667.0 Td ([ ] Restarting the server reports UP and emits a recovery message.) Tj ET
+0 g
+BT /F1 10 Tf 42 649.5 Td ([ ] DNS failure and closed port tests yield DOWN without crashing.) Tj ET
+0 g
+BT /F1 10 Tf 42 632.0 Td ([ ] CSV, state.tsv, logfile and '-r' uptime calculations are correct.) Tj ET
+0 g
+BT /F1 10 Tf 42 614.5 Td ([ ] A fresh supported-OS VM install, 3-minute timer, journal and clean uninstall are demonstrated.) Tj ET
+0 g
+BT /F2 12 Tf 42 588.0 Td (9. Current verification notes) Tj ET
+0 g
+BT /F1 10 Tf 42 568.0 Td (A previous multi-script version was tested with GitHub Actions and Ubuntu 26.04.1. The single-script) Tj ET
+0 g
+BT /F1 10 Tf 42 553.5 Td (refactor was tested in a local Bash environment with UP/DOWN/recovery, output files, sampled uptime) Tj ET
+0 g
+BT /F1 10 Tf 42 539.0 Td (and error codes. Final deployment evidence must be repeated on a course-approved VM.) Tj ET
+0 g
+BT /F2 12 Tf 42 512.5 Td (10. Course constraints and submission TODO) Tj ET
+0 g
+BT /F1 10 Tf 42 492.5 Td (The course specifies Ubuntu Server 22.04/24.04 or Rocky Linux 9; Ubuntu 26.04.1 is not listed. This) Tj ET
+0 g
+BT /F1 10 Tf 42 478.0 Td (PDF is a DRAFT, not an assertion that all required evidence has already been captured.) Tj ET
+0 g
+BT /F1 10 Tf 42 460.5 Td (Before submitting, replace the member placeholders with actual full names and IDs; insert real) Tj ET
+0 g
+BT /F1 10 Tf 42 446.0 Td (terminal screenshots under docs/screenshots/; update the report with results obtained on the VM used) Tj ET
+0 g
+BT /F1 10 Tf 42 431.5 Td (for the presentation.) Tj ET
+0.35 g
+BT /F1 8.5 Tf 42 399.0 Td (Draft prepared for group review. Do not claim final OS/compliance verification without testing.) Tj ET
+0.55 g
+BT /F1 8 Tf 42 34 Td (Draft report - add student names and genuine screenshots before submission) Tj ET
+BT /F1 8 Tf 535 34 Td (3) Tj ET
 endstream
 endobj
 9 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 10 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold >>
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+11 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
 endobj
 xref
-0 11
+0 12
 0000000000 65535 f 
 0000000020 00000 n 
 0000000069 00000 n 
 0000000138 00000 n 
-0000000275 00000 n 
-0000004254 00000 n 
-0000004391 00000 n 
-0000008529 00000 n 
-0000008666 00000 n 
-0000010053 00000 n 
-0000010121 00000 n 
+0000000286 00000 n 
+0000002901 00000 n 
+0000003049 00000 n 
+0000006371 00000 n 
+0000006519 00000 n 
+0000009180 00000 n 
+0000009250 00000 n 
+0000009326 00000 n 
 trailer
-<< /Size 11 /Root 1 0 R >>
+<< /Size 12 /Root 1 0 R >>
 startxref
-10195
+9395
 %%EOF
