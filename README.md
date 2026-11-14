@@ -135,7 +135,7 @@ Operational errors return code 1 and should leave the oneshot service in a faile
 sudo bash uninstall.sh --purge
 ```
 
-`uninstall.sh` disables the timer and removes service units, installed scripts and config. `--purge` additionally deletes archived CSV/state. Without `--purge`, the data directory is deliberately retained for recovery. For a fully clean presentation demo, use `--purge` and verify:
+`uninstall.sh` disables the timer, removes service units, installed scripts, config and archived CSV/state by default. Use `--keep-data` if you need to retain results. `--purge` is also supported as an explicit full cleanup. For the presentation, run it and verify:
 
 ```bash
 systemctl list-timers --all | grep sitewatch || echo "No SiteWatch timer"
