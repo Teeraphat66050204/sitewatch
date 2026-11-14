@@ -109,6 +109,8 @@ main() {
         exit 1
     fi
     mv -f -- "$state_tmp" "$state_file"
+    rm -f -- "$tmp"
+    trap - EXIT
     log INFO "Recorded $row_count checks to $csv_file"
 }
 main "$@"
