@@ -6,7 +6,7 @@ if (( EUID != 0 )); then
     exit 1
 fi
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-for file in "$ROOT/bin/sitewatch.sh" "$ROOT/bin/sitewatch-run.sh" \
+for file in "$ROOT/bin/sitewatch.sh" "$ROOT/bin/sitewatch-monitor.sh" "$ROOT/bin/sitewatch-run.sh" \
     "$ROOT/bin/sitewatch-report.sh" "$ROOT/config/sitewatch.conf" \
     "$ROOT/systemd/sitewatch.service" "$ROOT/systemd/sitewatch.timer"; do
     [[ -f "$file" ]] || { printf 'Missing required file: %s\n' "$file" >&2; exit 1; }
@@ -15,7 +15,7 @@ for cmd in curl getent nc awk sed flock systemctl; do
     command -v "$cmd" >/dev/null 2>&1 || { printf 'Missing command: %s\n' "$cmd" >&2; exit 1; }
 done
 install -d -m 0755 /usr/local/lib/sitewatch/bin /etc/sitewatch /var/lib/sitewatch
-install -m 0755 "$ROOT/bin/sitewatch.sh" "$ROOT/bin/sitewatch-run.sh" \
+install -m 0755 "$ROOT/bin/sitewatch.sh" "$ROOT/bin/sitewatch-monitor.sh" "$ROOT/bin/sitewatch-run.sh" \
     "$ROOT/bin/sitewatch-report.sh" /usr/local/lib/sitewatch/bin/
 if [[ ! -f /etc/sitewatch/sitewatch.conf ]]; then
     install -m 0644 "$ROOT/config/sitewatch.conf" /etc/sitewatch/sitewatch.conf
