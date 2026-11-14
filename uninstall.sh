@@ -5,13 +5,14 @@ if (( EUID != 0 )); then
     printf 'ERROR: run with sudo bash uninstall.sh\n' >&2
     exit 1
 fi
-PURGE=0
+PURGE=1
 if (( $# > 1 )); then
-    printf 'Usage: sudo bash uninstall.sh [--purge]\n' >&2
+    printf 'Usage: sudo bash uninstall.sh [--keep-data]\n' >&2
     exit 2
 fi
 if (( $# == 1 )); then
-    if [[ "$1" == "--purge" ]]; then PURGE=1
+    if [[ "$1" == "--keep-data" ]]; then PURGE=0
+    elif [[ "$1" == "--purge" ]]; then PURGE=1
     else printf 'Usage: sudo bash uninstall.sh [--purge]\n' >&2; exit 2
     fi
 fi
@@ -25,8 +26,8 @@ rm -f /etc/sitewatch/sitewatch.conf
 rmdir /etc/sitewatch 2>/dev/null || true
 if (( PURGE )); then
     rm -rf -- /var/lib/sitewatch
-    printf 'Uninstalled, including stored CSV and state (--purge).\n'
+    printf 'Uninstalled, including stored CSV and state.\n'
 else
     printf 'Uninstalled. CSV and state preserved in /var/lib/sitewatch.\n'
-    printf 'Use --purge to remove saved records too.\n'
+    printf 'Use --keep-data to preserve records instead.\n'
 fi
