@@ -40,7 +40,8 @@ git switch Emergency-protocol
 bash bin/sitewatch.sh -h
 bash bin/sitewatch.sh -n -c config/sitewatch.conf
 bash -n bin/*.sh install.sh uninstall.sh
-shellcheck bin/*.sh install.sh uninstall.sh
+shellcheck bin/*.sh install.sh uninstall.sh tests/test-sitewatch.sh
+bash tests/test-sitewatch.sh
 ```
 
 `-n` validates and lists the targets but does not touch CSV/state.
