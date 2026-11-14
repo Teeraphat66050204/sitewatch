@@ -1,0 +1,60 @@
+name: Temporary single-script validation
+on:
+  push:
+    branches: [Emergency-protocol]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencies
+        run: sudo apt-get update && sudo apt-get install -y shellcheck netcat-openbsd curl
+      - name: Syntax and ShellCheck
+        run: |
+          bash -n bin/sitewatch.sh install.sh uninstall.sh
+          shellcheck bin/sitewatch.sh install.sh uninstall.sh
+      - name: Functional smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"; kill "${server:-}" 2>/dev/null || true' EXIT
+          cat > "$tmp/test.conf" <<EOF
+          URLS=("http://127.0.0.1:18765")
+          SERVICES=("127.0.0.1:18765")
+          TIMEOUT=2
+          HTTP_MIN=200
+          HTTP_MAX=399
+          DATA_DIR="$tmp/data"
+          EOF
+          python3 -m http.server 18765 --bind 127.0.0.1 >"$tmp/server.log" 2>&1 &
+          server=$!
+          sleep 1
+          bash bin/sitewatch.sh -n -c "$tmp/test.conf"
+          test ! -d "$tmp/data"
+          bash bin/sitewatch.sh -c "$tmp/test.conf" 2>"$tmp/1.log"
+          grep -q '"UP"' "$tmp/data/results.csv"
+          kill "$server"
+          wait "$server" || true
+          server=""
+          bash bin/sitewatch.sh -c "$tmp/test.conf" 2>"$tmp/2.log"
+          test "$(grep -c 'ALERT:' "$tmp/2.log")" -eq 2
+          bash bin/sitewatch.sh -c "$tmp/test.conf" 2>"$tmp/3.log"
+          ! grep -q 'ALERT:' "$tmp/3.log"
+          python3 -m http.server 18765 --bind 127.0.0.1 >"$tmp/server2.log" 2>&1 &
+          server=$!
+          sleep 1
+          bash bin/sitewatch.sh -c "$tmp/test.conf" 2>"$tmp/4.log"
+          test "$(grep -c 'RECOVERY:' "$tmp/4.log")" -eq 2
+          bash bin/sitewatch.sh -r -c "$tmp/test.conf" | grep -Eq '^OVERALL[[:space:]]+4[[:space:]]+8[[:space:]]+50[.]00$'
+          test "$(wc -l < "$tmp/data/results.csv")" -eq 9
+          test "$(wc -l < "$tmp/data/state.tsv")" -eq 2
+          test -r "$tmp/data/sitewatch.log"
+          set +e
+          bash bin/sitewatch.sh -c "$tmp/missing.conf" >/dev/null 2>&1
+          failcode=$?
+          bash bin/sitewatch.sh -z >/dev/null 2>&1
+          usagecode=$?
+          set -e
+          test "$failcode" -eq 1
+          test "$usagecode" -eq 2
