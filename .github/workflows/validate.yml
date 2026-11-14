@@ -13,8 +13,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y shellcheck netcat-openbsd curl
       - name: Shell syntax and ShellCheck
         run: |
-          bash -n bin/sitewatch.sh bin/sitewatch-monitor.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
-          shellcheck bin/sitewatch.sh bin/sitewatch-monitor.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
+          bash -n bin/sitewatch.sh bin/sitewatch-monitor.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh tests/test-sitewatch.sh
+          shellcheck bin/sitewatch.sh bin/sitewatch-monitor.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh tests/test-sitewatch.sh
       - name: Check UP DOWN and transition-only alerts
         shell: bash
         run: |
@@ -62,6 +62,8 @@ jobs:
           set -e
           test "$rc" -eq 2
 
+      - name: Run standalone smoke test
+        run: bash tests/test-sitewatch.sh
       - name: Test clean installer and uninstaller with isolated systemctl stub
         shell: bash
         run: |
