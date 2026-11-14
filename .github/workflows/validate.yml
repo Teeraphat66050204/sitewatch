@@ -1,7 +1,7 @@
 name: Check SiteWatch fallback
 on:
   push:
-    branches: [backup/demo-integration]
+    branches: [backup/demo-integration, Emergency-protocol]
   pull_request:
 
 jobs:
@@ -13,8 +13,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y shellcheck netcat-openbsd curl
       - name: Shell syntax and ShellCheck
         run: |
-          bash -n bin/sitewatch.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
-          shellcheck bin/sitewatch.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
+          bash -n bin/sitewatch.sh bin/sitewatch-monitor.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
+          shellcheck bin/sitewatch.sh bin/sitewatch-monitor.sh bin/sitewatch-run.sh bin/sitewatch-report.sh install.sh uninstall.sh
       - name: Check UP DOWN and transition-only alerts
         shell: bash
         run: |
@@ -31,13 +31,13 @@ jobs:
           server=$!
           trap 'kill "$server" 2>/dev/null || true' EXIT
           sleep 1
-          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-1.log
+          bash bin/sitewatch.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-1.log
           grep -q '"UP"' "$SITEWATCH_DATA_DIR/results.csv"
           kill "$server"
           wait "$server" || true
-          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-2.log
+          bash bin/sitewatch.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-2.log
           grep -q 'ALERT:' /tmp/sitewatch-2.log
-          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-3.log
+          bash bin/sitewatch.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-3.log
           if grep -q 'ALERT:' /tmp/sitewatch-3.log; then
             echo "Repeated alert on unchanged DOWN status" >&2
             exit 1
@@ -45,7 +45,20 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/sitewatch-http2.log 2>&1 &
           server=$!
           sleep 1
-          bash bin/sitewatch-run.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-4.log
+          bash bin/sitewatch.sh -c /tmp/ci-sitewatch.conf 2>/tmp/sitewatch-4.log
           grep -q 'RECOVERY:' /tmp/sitewatch-4.log
           bash bin/sitewatch-report.sh "$SITEWATCH_DATA_DIR/results.csv"
           test "$(wc -l < "$SITEWATCH_DATA_DIR/results.csv")" -eq 9
+          bash bin/sitewatch-report.sh "$SITEWATCH_DATA_DIR/results.csv" | grep -F 
+OVERALL\t4\t8\t50.00'
+          bash bin/sitewatch.sh -h >/dev/null
+          bash bin/sitewatch.sh -n -c /tmp/ci-sitewatch.conf >/dev/null
+          if bash bin/sitewatch.sh -c /tmp/not-here-sitewatch.conf; then
+            echo "Missing config should fail" >&2
+            exit 1
+          fi
+          set +e
+          bash bin/sitewatch.sh -z >/dev/null 2>&1
+          rc=$?
+          set -e
+          test "$rc" -eq 2
