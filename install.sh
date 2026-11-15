@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Project: SiteWatch - Website & Service Monitoring
-# Member Name 1: [รายชื่อสมาชิก 1]
+# Member Name 1: 66050204 ธีรภัทร ผลเจริญ
 # Member Name 2: 66050033 กิตติคุณ จรูมเคลือ 
 # Member Name 3: [รายชื่อสมาชิก 3]
 # Member Name 4: [รายชื่อสมาชิก 4]
