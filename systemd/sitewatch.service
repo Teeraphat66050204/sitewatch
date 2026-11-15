@@ -1,0 +1,10 @@
+[Unit]
+Description=SiteWatch Website and Service Monitoring
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/sitewatch/bin/sitewatch.sh -c /etc/sitewatch/sitewatch.conf
+WorkingDirectory=/usr/local/lib/sitewatch
+# Logs are available in journalctl -u sitewatch.service

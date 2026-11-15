@@ -1,0 +1,11 @@
+[Unit]
+Description=Run SiteWatch every 3 minutes
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=3min
+AccuracySec=1s
+Unit=sitewatch.service
+
+[Install]
+WantedBy=timers.target
